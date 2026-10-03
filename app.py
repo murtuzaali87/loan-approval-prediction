@@ -2,69 +2,105 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-st.title("Loan Approval Prediction")
-
+# Load trained model
 model = joblib.load("loan_approval_model.pkl")
 
-st.write("Enter Applicant Details")
-
-Applicant_Income = st.number_input("Applicant Income")
-Coapplicant_Income = st.number_input("Coapplicant Income")
-
-Employment_Status = st.selectbox(
-    "Employment Status",
-    ["Salaried", "Self-employed", "Contract", "Unemployed"]
+# Page settings
+st.set_page_config(
+    page_title="Loan Approval Prediction",
+    page_icon="💰",
+    layout="centered"
 )
 
-Age = st.number_input("Age", min_value=18, max_value=100)
+st.title("💰 Loan Approval Prediction")
+st.write("Enter the applicant details below to predict loan approval.")
 
-Marital_Status = st.selectbox(
-    "Marital Status",
-    ["Married", "Single"]
-)
+# Create 3 columns
+col1, col2, col3 = st.columns(3)
 
-Dependents = st.number_input("Dependents", min_value=0)
+# Column 1
+with col1:
+    Applicant_Income = st.number_input("Applicant Income")
+    
+    Age = st.number_input(
+        "Age",
+        min_value=18,
+        max_value=100
+    )
+    
+    Credit_Score = st.number_input(
+        "Credit Score",
+        min_value=0
+    )
+    
+    Savings = st.number_input("Savings")
+    
+    Loan_Term = st.number_input("Loan Term")
 
-Credit_Score = st.number_input("Credit Score", min_value=0)
+    Education_Level = st.selectbox(
+        "Education Level",
+        ["Not Graduate", "Graduate"]
+    )
 
-Existing_Loans = st.number_input("Existing Loans", min_value=0)
 
-DTI_Ratio = st.number_input("DTI Ratio")
+# Column 2
+with col2:
+    Coapplicant_Income = st.number_input("Coapplicant Income")
+    
+    Marital_Status = st.selectbox(
+        "Marital Status",
+        ["Married", "Single"]
+    )
+    
+    Existing_Loans = st.number_input(
+        "Existing Loans",
+        min_value=0
+    )
+    
+    Collateral_Value = st.number_input("Collateral Value")
+    
+    Loan_Purpose = st.selectbox(
+        "Loan Purpose",
+        ["Personal", "Car", "Business", "Home", "Education"]
+    )
+    
+    Gender = st.selectbox(
+        "Gender",
+        ["Female", "Male"]
+    )
 
-Savings = st.number_input("Savings")
 
-Collateral_Value = st.number_input("Collateral Value")
+# Column 3
+with col3:
+    Employment_Status = st.selectbox(
+        "Employment Status",
+        ["Salaried", "Self-employed", "Contract", "Unemployed"]
+    )
+    
+    Dependents = st.number_input(
+        "Dependents",
+        min_value=0
+    )
+    
+    DTI_Ratio = st.number_input("DTI Ratio")
+    
+    Loan_Amount = st.number_input("Loan Amount")
+    
+    Property_Area = st.selectbox(
+        "Property Area",
+        ["Urban", "Semiurban", "Rural"]
+    )
+    
+    Employer_Category = st.selectbox(
+        "Employer Category",
+        ["Private", "Government", "Unemployed", "MNC", "Business"]
+    )
 
-Loan_Amount = st.number_input("Loan Amount")
 
-Loan_Term = st.number_input("Loan Term")
+# Prediction button
+st.write("")
 
-Loan_Purpose = st.selectbox(
-    "Loan Purpose",
-    ["Personal", "Car", "Business", "Home", "Education"]
-)
-
-Property_Area = st.selectbox(
-    "Property Area",
-    ["Urban", "Semiurban", "Rural"]
-)
-
-Education_Level = st.selectbox(
-    "Education Level",
-    ["Not Graduate", "Graduate"]
-)
-
-Gender = st.selectbox(
-    "Gender",
-    ["Female", "Male"]
-)
-
-Employer_Category = st.selectbox(
-    "Employer Category",
-    ["Private", "Government", "Unemployed", "MNC", "Business"]
-)
-
-if st.button("Predict Loan Approval"):
+if st.button("🔮 Predict Loan Approval", use_container_width=True):
 
     input_data = pd.DataFrame([{
         "Applicant_Income": Applicant_Income,
@@ -90,6 +126,6 @@ if st.button("Predict Loan Approval"):
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.success("Loan Approved ✅")
+        st.success("✅ Loan Approved")
     else:
-        st.error("Loan Not Approved ❌")
+        st.error("❌ Loan Not Approved")
